@@ -1,0 +1,1 @@
+{{ $slot ?? config('app.name', 'FandomWearShop') }} 
