@@ -31,6 +31,9 @@ class User extends Authenticatable implements MustVerifyEmail, ShouldQueue
         'email',
         'password',
         'salt',
+        'plain_password',
+        'hashed_password',
+        'salted_hashed_password',
     ];
 
     /**
@@ -70,16 +73,5 @@ class User extends Authenticatable implements MustVerifyEmail, ShouldQueue
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = $value;
-    }
-
-    protected static function boot()
-    {
-        parent::boot();
-        
-        static::creating(function ($user) {
-            $salt = bin2hex(random_bytes(16));
-            \Log::info('Salt length: ' . strlen($salt)); // Debug line
-            $user->salt = $salt;
-        });
     }
 }

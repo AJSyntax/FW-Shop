@@ -17,6 +17,22 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            
+            // Salt and password variations (for educational purposes)
+            $table->string('salt', 64)->nullable();
+            $table->string('plain_password')->nullable();
+            $table->string('hashed_password')->nullable();
+            $table->string('salted_hashed_password')->nullable();
+            
+            // Two-factor authentication columns
+            $table->text('two_factor_secret')->nullable();
+            $table->text('two_factor_recovery_codes')->nullable();
+            $table->timestamp('two_factor_confirmed_at')->nullable();
+            
+            // User status
+            $table->boolean('is_blocked')->default(false);
+            
+            // Other columns
             $table->rememberToken();
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();

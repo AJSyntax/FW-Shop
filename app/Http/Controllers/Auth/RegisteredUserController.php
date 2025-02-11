@@ -28,23 +28,37 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', 'min:8'],
         ]);
 
-        // Generate random salt
-        $salt = Str::random(16);
-        
-        // Create salted and hashed password
-        $hashedPassword = Hash::make($request->password . $salt);
+        try {
+            // Generate random salt
+            $salt = bin2hex(random_bytes(16)); // Using bin2hex for consistent 32-character length
+            
+            // Store the plain password (for educational purposes only!)
+            $plainPassword = $request->password;
+            
+            // Create regular hash without salt
+            $hashedPassword = Hash::make($plainPassword);
+            
+            // Create salted hash by combining password and salt
+            $saltedHashedPassword = Hash::make($plainPassword . $salt);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => $hashedPassword,
-            'salt' => $salt,
-        ]);
+            // Create user with all password variations
+            $user = new User();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->salt = $salt;
+            $user->plain_password = $plainPassword;           // Store plain text (educational only!)
+            $user->hashed_password = $hashedPassword;        // Store regular hash
+            $user->salted_hashed_password = $saltedHashedPassword; // Store salted hash
+            $user->password = $saltedHashedPassword;         // Use salted hash for auth
+            $user->save();
 
-        event(new Registered($user));
+            event(new Registered($user));
+            Auth::login($user);
 
-        Auth::login($user);
-
-        return redirect(RouteServiceProvider::HOME);
+            return redirect(RouteServiceProvider::HOME);
+        } catch (\Exception $e) {
+            \Log::error('User registration error: ' . $e->getMessage());
+            throw $e;
+        }
     }
 } 
