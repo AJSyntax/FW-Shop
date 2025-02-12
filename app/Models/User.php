@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail, ShouldQueue
 {
     use HasApiTokens;
 
@@ -29,6 +30,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'salt',
+        'plain_password',
+        'hashed_password',
+        'salted_hashed_password',
     ];
 
     /**
@@ -41,6 +46,7 @@ class User extends Authenticatable
         'remember_token',
         'two_factor_recovery_codes',
         'two_factor_secret',
+        'salt',
     ];
 
     /**
@@ -61,12 +67,11 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
         ];
     }
 
     public function setPasswordAttribute($value)
     {
-        $this->attributes['password'] = $value; // This will store password as plain text
+        $this->attributes['password'] = $value;
     }
 }

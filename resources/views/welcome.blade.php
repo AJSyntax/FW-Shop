@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Fandom Wear Shop</title>
+        <title>FandomWearShop</title>
 
         <!-- Scripts and Styles -->
         <script src="https://cdn.tailwindcss.com"></script>

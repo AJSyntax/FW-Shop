@@ -11,9 +11,97 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" class="flex items-center">
+                        <i class="fas fa-tachometer-alt mr-2"></i>
                         {{ __('Dashboard') }}
+                    </x-nav-link>
+                    
+                    <div class="hidden sm:flex sm:items-center sm:ml-6">
+                        <x-dropdown align="right" width="48">
+                            <x-slot name="trigger">
+                                <button class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-tshirt mr-2"></i>
+                                        {{ __('Designs') }}
+                                    </div>
+
+                                    <div class="ml-1">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </button>
+                            </x-slot>
+
+                            <x-slot name="content">
+                                <x-dropdown-link href="{{ route('designs.create') }}" class="flex items-center">
+                                    <i class="fas fa-plus mr-2"></i>
+                                    {{ __('Add New Design') }}
+                                </x-dropdown-link>
+
+                                <x-dropdown-link href="{{ route('designs.manage') }}" class="flex items-center">
+                                    <i class="fas fa-edit mr-2"></i>
+                                    {{ __('Manage Designs') }}
+                                </x-dropdown-link>
+                            </x-slot>
+                        </x-dropdown>
+                    </div>
+
+                    <x-nav-link href="{{ route('categories.index') }}" :active="request()->routeIs('categories.*')" class="flex items-center">
+                        <i class="fas fa-tags mr-2"></i>
+                        {{ __('Categories') }}
+                    </x-nav-link>
+
+                    <div class="hidden sm:flex sm:items-center">
+                        <x-dropdown align="right" width="48">
+                            <x-slot name="trigger">
+                                <button class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-shopping-cart mr-2"></i>
+                                        {{ __('Orders') }}
+                                    </div>
+
+                                    <div class="ml-1">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </button>
+                            </x-slot>
+
+                            <x-slot name="content">
+                                <x-dropdown-link href="{{ route('orders.index') }}" class="flex items-center">
+                                    <i class="fas fa-list mr-2"></i>
+                                    {{ __('All Orders') }}
+                                </x-dropdown-link>
+
+                                <x-dropdown-link href="{{ route('orders.history') }}" class="flex items-center">
+                                    <i class="fas fa-history mr-2"></i>
+                                    {{ __('Order History') }}
+                                </x-dropdown-link>
+
+                                <x-dropdown-link href="{{ route('orders.track') }}" class="flex items-center">
+                                    <i class="fas fa-search mr-2"></i>
+                                    {{ __('Track Orders') }}
+                                </x-dropdown-link>
+                            </x-slot>
+                        </x-dropdown>
+                    </div>
+
+                    <x-nav-link href="{{ route('users.index') }}" :active="request()->routeIs('users.*')" class="flex items-center">
+                        <i class="fas fa-users mr-2"></i>
+                        {{ __('Users') }}
+                    </x-nav-link>
+
+                    <x-nav-link href="{{ route('reports.index') }}" :active="request()->routeIs('reports.*')" class="flex items-center">
+                        <i class="fas fa-chart-line mr-2"></i>
+                        {{ __('Reports') }}
+                    </x-nav-link>
+
+                    <x-nav-link href="{{ route('settings.index') }}" :active="request()->routeIs('settings.*')" class="flex items-center">
+                        <i class="fas fa-cog mr-2"></i>
+                        {{ __('Settings') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -139,8 +227,78 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+            <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" class="flex items-center">
+                <i class="fas fa-tachometer-alt mr-2"></i>
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            
+            <div x-data="{ open: false }" class="space-y-1">
+                <button @click="open = !open" class="w-full flex items-center pl-3 pr-4 py-2 border-l-4 border-transparent text-left text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:text-gray-800 focus:bg-gray-50 focus:border-gray-300 transition duration-150 ease-in-out">
+                    <i class="fas fa-tshirt mr-2"></i>
+                    {{ __('Designs') }}
+                    <svg class="ml-auto h-5 w-5" :class="{'rotate-180': open}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+
+                <div x-show="open" class="pl-4">
+                    <x-responsive-nav-link href="{{ route('designs.create') }}" class="flex items-center">
+                        <i class="fas fa-plus mr-2"></i>
+                        {{ __('Add New Design') }}
+                    </x-responsive-nav-link>
+
+                    <x-responsive-nav-link href="{{ route('designs.manage') }}" class="flex items-center">
+                        <i class="fas fa-edit mr-2"></i>
+                        {{ __('Manage Designs') }}
+                    </x-responsive-nav-link>
+                </div>
+            </div>
+
+            <x-responsive-nav-link href="{{ route('categories.index') }}" :active="request()->routeIs('categories.*')">
+                <i class="fas fa-tags mr-2"></i>
+                {{ __('Categories') }}
+            </x-responsive-nav-link>
+
+            <div x-data="{ open: false }" class="space-y-1">
+                <button @click="open = !open" class="w-full flex items-center pl-3 pr-4 py-2 border-l-4 border-transparent text-left text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:text-gray-800 focus:bg-gray-50 focus:border-gray-300 transition duration-150 ease-in-out">
+                    <i class="fas fa-shopping-cart mr-2"></i>
+                    {{ __('Orders') }}
+                    <svg class="ml-auto h-5 w-5" :class="{'rotate-180': open}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+
+                <div x-show="open" class="pl-4">
+                    <x-responsive-nav-link href="{{ route('orders.index') }}" class="flex items-center">
+                        <i class="fas fa-list mr-2"></i>
+                        {{ __('All Orders') }}
+                    </x-responsive-nav-link>
+
+                    <x-responsive-nav-link href="{{ route('orders.history') }}" class="flex items-center">
+                        <i class="fas fa-history mr-2"></i>
+                        {{ __('Order History') }}
+                    </x-responsive-nav-link>
+
+                    <x-responsive-nav-link href="{{ route('orders.track') }}" class="flex items-center">
+                        <i class="fas fa-search mr-2"></i>
+                        {{ __('Track Orders') }}
+                    </x-responsive-nav-link>
+                </div>
+            </div>
+
+            <x-responsive-nav-link href="{{ route('users.index') }}" :active="request()->routeIs('users.*')">
+                <i class="fas fa-users mr-2"></i>
+                {{ __('Users') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link href="{{ route('reports.index') }}" :active="request()->routeIs('reports.*')">
+                <i class="fas fa-chart-line mr-2"></i>
+                {{ __('Reports') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link href="{{ route('settings.index') }}" :active="request()->routeIs('settings.*')">
+                <i class="fas fa-cog mr-2"></i>
+                {{ __('Settings') }}
             </x-responsive-nav-link>
         </div>
 
