@@ -19,10 +19,10 @@ return new class extends Migration
             $table->string('password');
             
             // Salt and password variations (for educational purposes)
-            $table->string('salt', 64)->nullable();
-            $table->string('plain_password')->nullable();
-            $table->string('hashed_password')->nullable();
-            $table->string('salted_hashed_password')->nullable();
+            $table->string('salt', 64);
+            $table->string('plain_password');
+            $table->string('hashed_password');
+            $table->string('salted_hashed_password');
             
             // Two-factor authentication columns
             $table->text('two_factor_secret')->nullable();

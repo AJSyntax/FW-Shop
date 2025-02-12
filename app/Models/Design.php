@@ -14,6 +14,12 @@ class Design extends Model
         'category_id', 'stock', 'is_active'
     ];
 
+    protected $casts = [
+        'price' => 'decimal:2',
+        'is_active' => 'boolean',
+        'stock' => 'integer'
+    ];
+
     public function category()
     {
         return $this->belongsTo(Category::class);
@@ -22,5 +28,10 @@ class Design extends Model
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function getImageUrlAttribute()
+    {
+        return $this->image_path ?? 'https://via.placeholder.com/150';
     }
 } 

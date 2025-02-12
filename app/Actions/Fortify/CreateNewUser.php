@@ -26,10 +26,17 @@ class CreateNewUser implements CreatesNewUsers
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ])->validate();
 
+        $salt = bin2hex(random_bytes(16));
+        $plainPassword = $input['password'];
+        
         return User::create([
             'name' => $input['name'],
             'email' => $input['email'],
-            'password' => Hash::make($input['password']),
+            'password' => Hash::make($plainPassword),
+            'salt' => $salt,
+            'plain_password' => $plainPassword,
+            'hashed_password' => sha1($plainPassword),
+            'salted_hashed_password' => sha1($plainPassword . $salt),
         ]);
     }
 }

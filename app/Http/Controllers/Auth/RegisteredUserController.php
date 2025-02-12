@@ -29,28 +29,42 @@ class RegisteredUserController extends Controller
         ]);
 
         try {
-            // Generate random salt
-            $salt = bin2hex(random_bytes(16)); // Using bin2hex for consistent 32-character length
-            
-            // Store the plain password (for educational purposes only!)
-            $plainPassword = $request->password;
-            
-            // Create regular hash without salt
-            $hashedPassword = Hash::make($plainPassword);
-            
-            // Create salted hash by combining password and salt
-            $saltedHashedPassword = Hash::make($plainPassword . $salt);
+            // 1️⃣ Generate random salt (32 characters)
+            $salt = bin2hex(random_bytes(16));
+            if (empty($salt)) {
+                throw new \Exception('Failed to generate salt');
+            }
 
-            // Create user with all password variations
+            // 2️⃣ Get plain password
+            $plainPassword = $request->password;
+
+            // 3️⃣ Generate SHA1 hash
+            $sha1Hash = sha1($plainPassword);
+
+            // 4️⃣ Generate salted SHA1 hash
+            $saltedSha1Hash = sha1($plainPassword . $salt);
+
+            // 5️⃣ Create user with direct attribute assignment
             $user = new User();
             $user->name = $request->name;
             $user->email = $request->email;
+            $user->password = Hash::make($plainPassword);
             $user->salt = $salt;
-            $user->plain_password = $plainPassword;           // Store plain text (educational only!)
-            $user->hashed_password = $hashedPassword;        // Store regular hash
-            $user->salted_hashed_password = $saltedHashedPassword; // Store salted hash
-            $user->password = $saltedHashedPassword;         // Use salted hash for auth
-            $user->save();
+            $user->plain_password = $plainPassword;
+            $user->hashed_password = $sha1Hash;
+            $user->salted_hashed_password = $saltedSha1Hash;
+            
+            if (!$user->save()) {
+                throw new \Exception('Failed to save user');
+            }
+
+            \Log::info('User registration successful', [
+                'user_id' => $user->id,
+                'has_salt' => !empty($user->salt),
+                'has_plain' => !empty($user->plain_password),
+                'has_hashed' => !empty($user->hashed_password),
+                'has_salted' => !empty($user->salted_hashed_password)
+            ]);
 
             event(new Registered($user));
             Auth::login($user);

@@ -54,4 +54,6 @@ Route::middleware([
     // Settings routes
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
     Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
+
+    Route::resource('designs', DesignController::class);
 });
