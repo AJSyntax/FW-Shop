@@ -59,10 +59,12 @@ Route::middleware([
     // Cart Routes (Buyers)
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/add/{design}', [CartController::class, 'add'])->name('cart.add'); // Use POST for adding items
+    Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove'); // Route for removing single item
+    Route::delete('/cart/remove-multiple', [CartController::class, 'removeMultiple'])->name('cart.removeMultiple'); // Route for removing multiple items
 
     // Checkout Routes (Buyers)
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-    // TODO: Add POST route for submitting checkout form
+    Route::post('/checkout', [OrderController::class, 'store'])->name('order.store'); // Add route for storing the order
 
     // Generic dashboard - might be replaced by role-specific ones or redirect logic
     // Route::get('/dashboard', function () {

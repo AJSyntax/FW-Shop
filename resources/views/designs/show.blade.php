@@ -16,6 +16,8 @@
 
                     {{-- Details Section --}}
                     <div class="md:w-1/2 p-6 md:p-8">
+                        {{-- Removed page-specific flash messages; handled by layouts/app.blade.php --}}
+
                         <h1 class="text-3xl font-bold text-gray-900 mb-4">{{ $design->title }}</h1>
 
                         <p class="text-gray-700 mb-4">
@@ -43,7 +45,7 @@
                         @if($design->stock > 0)
                             <form action="{{ route('cart.add', $design->id) }}" method="POST">
                                 @csrf
-                                {{-- Optional: Add quantity selector here later --}}
+                                {{-- Quantity input removed --}}
                                 <button type="submit" class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150 ease-in-out">
                                     Add to Cart
                                 </button>

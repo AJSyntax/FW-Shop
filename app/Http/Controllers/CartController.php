@@ -33,36 +33,25 @@ class CartController extends Controller
      * @param  int  $id Design ID
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function add(Request $request, $id)
+    public function add(Request $request, $id) // Keep Request for potential future use, but don't use quantity input
     {
         $design = Design::findOrFail($id);
         $cart = Session::get('cart', []);
 
-        // If cart is empty then this the first product
-        if (!$cart) {
-            $cart = [
-                $id => [
-                    "title" => $design->title,
-                    "quantity" => 1,
-                    "price" => $design->price,
-                    "image_path" => $design->image_path
-                ]
-            ];
-            Session::put('cart', $cart);
-            return redirect()->back()->with('success', 'Design added to cart successfully!');
+        // Check stock
+        if ($design->stock <= 0) {
+            return redirect()->back()->with('error', 'This item is out of stock.');
         }
 
-        // If cart not empty then check if this product exist then increment quantity
+        // Check if item already exists in cart
         if (isset($cart[$id])) {
-            $cart[$id]['quantity']++;
-            Session::put('cart', $cart);
-            return redirect()->back()->with('success', 'Design quantity updated in cart!');
+            return redirect()->back()->with('info', 'This design is already in your cart.');
         }
 
-        // If item not exist in cart then add to cart with quantity = 1
+        // Add item to cart with quantity = 1
         $cart[$id] = [
             "title" => $design->title,
-            "quantity" => 1,
+            "quantity" => 1, // Always add quantity 1
             "price" => $design->price,
             "image_path" => $design->image_path
         ];
@@ -71,5 +60,53 @@ class CartController extends Controller
         return redirect()->back()->with('success', 'Design added to cart successfully!');
     }
 
-    // TODO: Implement update and remove methods
+    /**
+     * Remove a specific design from the shopping cart.
+     *
+     * @param  int  $id Design ID
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function remove($id)
+    {
+        $cart = Session::get('cart', []);
+
+        if (isset($cart[$id])) {
+            unset($cart[$id]);
+            Session::put('cart', $cart);
+            return redirect()->back()->with('success', 'Design removed from cart successfully!');
+        }
+
+        return redirect()->back()->with('error', 'Design not found in cart.');
+    }
+
+     /**
+     * Remove multiple designs from the shopping cart.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function removeMultiple(Request $request)
+    {
+        $idsToRemove = $request->input('ids', []);
+        $cart = Session::get('cart', []);
+        $removedCount = 0;
+
+        if (empty($idsToRemove)) {
+            return redirect()->back()->with('info', 'No designs selected for removal.');
+        }
+
+        foreach ($idsToRemove as $id) {
+            if (isset($cart[$id])) {
+                unset($cart[$id]);
+                $removedCount++;
+            }
+        }
+
+        if ($removedCount > 0) {
+            Session::put('cart', $cart);
+            return redirect()->back()->with('success', $removedCount . ' ' . \Str::plural('design', $removedCount) . ' removed from cart successfully!');
+        }
+
+        return redirect()->back()->with('error', 'Selected designs not found in cart or none selected.');
+    }
 }

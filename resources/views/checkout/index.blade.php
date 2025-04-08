@@ -67,7 +67,8 @@
                     </form>
 
                     {{-- Confirmation Modal --}}
-                    <x-confirmation-modal wire:model.live="confirmingOrder" x-show="confirmingOrder" @close="confirmingOrder = false">
+                    {{-- Removed wire:model.live --}}
+                    <x-confirmation-modal id="confirm-order-modal" x-show="confirmingOrder" @close.stop="confirmingOrder = false" @keydown.escape.window="confirmingOrder = false">
                         <x-slot name="title">
                             Confirm Order
                         </x-slot>
@@ -84,7 +85,8 @@
                                 Cancel
                             </x-secondary-button>
 
-                            <x-danger-button class="ms-3" type="submit" form="checkout-form"> {{-- Submits the form --}}
+                            {{-- Removed wire:loading.attr if it existed, ensure type=submit works --}}
+                            <x-danger-button class="ms-3" type="submit" form="checkout-form">
                                 Place Order
                             </x-danger-button>
                         </x-slot>

@@ -37,8 +37,30 @@
 
             <!-- Page Content -->
             <main>
-                {{-- Flash Message Display --}}
-                @if (session('success'))
+                {{-- Global Flash Message Display --}}
+                @php
+                    $message = '';
+                    $type = '';
+                    if (session('success')) {
+                        $message = session('success');
+                        $type = 'success';
+                    } elseif (session('error')) {
+                        $message = session('error');
+                        $type = 'error';
+                    } elseif (session('info')) {
+                        $message = session('info');
+                        $type = 'info';
+                    }
+
+                    $bgColor = match($type) {
+                        'success' => 'bg-green-500',
+                        'error' => 'bg-red-500',
+                        'info' => 'bg-blue-500',
+                        default => '',
+                    };
+                @endphp
+
+                @if ($message && $bgColor)
                     <div
                         x-data="{ show: true }"
                         x-init="setTimeout(() => show = false, 4000)"
@@ -49,13 +71,13 @@
                         x-transition:leave="transition ease-in duration-200"
                         x-transition:leave-start="opacity-100 transform translate-y-0"
                         x-transition:leave-end="opacity-0 transform translate-y-2"
-                        class="fixed top-5 right-5 z-50 bg-green-500 text-white text-sm font-bold px-4 py-3 rounded-lg shadow-md"
+                        class="fixed top-5 right-5 z-50 {{ $bgColor }} text-white text-sm font-bold px-4 py-3 rounded-lg shadow-md"
                         role="alert"
                     >
-                        <p>{{ session('success') }}</p>
+                        <p>{{ $message }}</p>
                     </div>
                 @endif
-                {{-- End Flash Message Display --}}
+                {{-- End Global Flash Message Display --}}
 
                 {{ $slot }}
             </main>
@@ -64,5 +86,7 @@
         @stack('modals')
 
         @livewireScripts
+
+        @stack('scripts') {{-- Add stack for page-specific scripts --}}
     </body>
 </html>
