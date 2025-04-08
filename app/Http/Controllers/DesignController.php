@@ -20,6 +20,34 @@ class DesignController extends Controller
                 'api_key'    => config('cloudinary.api_key'),
                 'api_secret' => config('cloudinary.api_secret'),
             ],
+            // Add this section for Guzzle configuration
+            'url' => [
+                'secure' => true, // Keep using HTTPS
+                // Disable SSL verification for local development ONLY
+                'secure_distribution' => null, 
+                'private_cdn' => false,
+                'cname' => null,
+                'secure_cdn_subdomain' => false,
+                'cdn_subdomain' => false,
+            ],
+            'api' => [
+                'upload_options' => [
+                    // Pass Guzzle client options here (keep for good measure)
+                    'client_config' => [
+                        'verify' => false, 
+                    ],
+                    // Add direct cURL options for upload
+                    'curl' => [
+                        CURLOPT_SSL_VERIFYPEER => false,
+                        CURLOPT_SSL_VERIFYHOST => false, // Use false (or 0)
+                    ],
+                ],
+                // Also apply to general API calls if needed, though upload is primary
+                 'curl' => [
+                    CURLOPT_SSL_VERIFYPEER => false,
+                    CURLOPT_SSL_VERIFYHOST => false,
+                ],
+            ],
         ]);
     }
 
@@ -54,10 +82,17 @@ class DesignController extends Controller
             $image = $request->file('image');
             try {
                 \Log::info("Attempting Cloudinary upload for: " . $validated['title']);
-                $uploadedFile = $this->cloudinary->uploadApi()->upload($image->getRealPath(), [
+                // Define upload options, including disabling SSL verification for this specific call
+                $uploadOptions = [
                     'folder' => 'designs',
-                    'transformation' => ['quality' => 'auto', 'fetch_format' => 'auto']
-                ]);
+                    'transformation' => ['quality' => 'auto', 'fetch_format' => 'auto'],
+                    // Add cURL options directly here for the upload call
+                    'curl' => [
+                        CURLOPT_SSL_VERIFYPEER => false,
+                        CURLOPT_SSL_VERIFYHOST => false, // Use 0 or false
+                    ],
+                ];
+                $uploadedFile = $this->cloudinary->uploadApi()->upload($image->getRealPath(), $uploadOptions);
                 $uploadedImagePath = $uploadedFile['secure_url'];
                 \Log::info("Cloudinary upload successful: " . $uploadedImagePath);
             } catch (\Throwable $e) { // Catch Throwable for maximum safety
