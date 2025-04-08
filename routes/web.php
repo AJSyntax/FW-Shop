@@ -64,7 +64,13 @@ Route::middleware([
 
     // Checkout Routes (Buyers)
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-    Route::post('/checkout', [OrderController::class, 'store'])->name('order.store'); // Add route for storing the order
+    // Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store'); // Old route, replaced by PayPal flow
+    Route::get('/checkout/success/{order}', [CheckoutController::class, 'success'])->name('checkout.success'); // Show order success page
+
+    // PayPal Checkout Routes
+    Route::post('/checkout/paypal/create', [CheckoutController::class, 'payWithPayPal'])->name('checkout.paypal.create');
+    Route::get('/checkout/paypal/success', [CheckoutController::class, 'paypalSuccess'])->name('checkout.paypal.success');
+    Route::get('/checkout/paypal/cancel', [CheckoutController::class, 'paypalCancel'])->name('checkout.paypal.cancel');
 
     // Generic dashboard - might be replaced by role-specific ones or redirect logic
     // Route::get('/dashboard', function () {

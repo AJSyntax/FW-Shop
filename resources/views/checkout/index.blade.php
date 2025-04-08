@@ -16,86 +16,127 @@
                     </div>
                 @endif
 
-                {{-- Alpine.js State for Modal --}}
-                <div x-data="{ confirmingOrder: false }">
+                {{-- Section for Shipping Address (Keep or modify as needed) --}}
+                <div class="mb-6 border-b pb-4">
+                    <h4 class="text-lg font-medium mb-3">Shipping Address</h4>
+                    <p class="text-gray-600">Placeholder for shipping address form fields... (Collect if needed)</p>
+                    {{-- Add address fields here if required before payment --}}
+                </div>
 
-                    {{-- Checkout Form --}}
-                    {{-- TODO: Replace with actual checkout form (address, payment, etc.) --}}
-                    <form action="{{ route('order.store') }}" method="POST" id="checkout-form"> {{-- Placeholder action, will likely change --}}
-                        @csrf
-
-                        {{-- Section for Shipping Address --}}
-                    <div class="mb-6 border-b pb-4">
-                        <h4 class="text-lg font-medium mb-3">Shipping Address</h4>
-                        <p class="text-gray-600">Placeholder for shipping address form fields...</p>
-                        {{-- Example fields:
-                        <input type="text" name="address_line1" placeholder="Address Line 1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
-                        <input type="text" name="city" placeholder="City" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
-                        ... etc ...
-                        --}}
-                    </div>
-
-                    {{-- Section for Payment Details --}}
-                    <div class="mb-6 border-b pb-4">
-                        <h4 class="text-lg font-medium mb-3">Payment Details</h4>
-                        <p class="text-gray-600">Placeholder for payment details form fields...</p>
-                         {{-- Example fields:
-                        <input type="text" name="card_number" placeholder="Card Number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
-                        ... etc ...
-                        --}}
-                    </div>
-
-                    {{-- Order Summary (Optional Preview) --}}
-                    <div class="mb-6">
-                        <h4 class="text-lg font-medium mb-3">Order Summary Preview</h4>
-                        <ul class="list-disc list-inside text-sm text-gray-700">
-                            @foreach($cart as $id => $details)
-                                <li>{{ $details['title'] }} (x{{ $details['quantity'] }}) - ${{ number_format($details['price'] * $details['quantity'], 2) }}</li>
-                            @endforeach
-                        </ul>
+                {{-- Order Summary --}}
+                <div class="mb-6 border-b pb-4">
+                    <h4 class="text-lg font-medium mb-3">Order Summary</h4>
+                    <ul class="list-disc list-inside text-sm text-gray-700">
+                        @forelse($cart as $id => $details)
+                            <li>{{ $details['title'] }} (x{{ $details['quantity'] }}) - ${{ number_format($details['price'] * $details['quantity'], 2) }}</li>
+                        @empty
+                            <li>Your cart is empty.</li>
+                        @endforelse
+                    </ul>
+                    @if(!empty($cart))
                         <p class="mt-2 font-semibold">Total: ${{ number_format($total, 2) }}</p>
+                    @endif
+                </div>
+
+                {{-- Payment Section --}}
+                <div class="mb-6">
+                    <h4 class="text-lg font-medium mb-3">Payment Method</h4>
+
+                    {{-- PayPal Button Container --}}
+                    <div id="paypal-button-container" class="mt-4">
+                        {{-- PayPal button will be rendered here by the SDK --}}
                     </div>
+                    <div id="paypal-error" class="text-red-600 text-sm mt-2" style="display: none;"></div> {{-- Error message display --}}
 
-                    {{-- Proceed Button --}}
-                        {{-- Proceed Button - Triggers Modal --}}
-                        <div class="text-right">
-                            <button type="button" @click="confirmingOrder = true" class="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150 ease-in-out">
-                                Proceed to Confirmation
-                            </button>
-                        </div>
-
-                    </form>
-
-                    {{-- Confirmation Modal --}}
-                    {{-- Removed wire:model.live --}}
-                    <x-confirmation-modal id="confirm-order-modal" x-show="confirmingOrder" @close.stop="confirmingOrder = false" @keydown.escape.window="confirmingOrder = false">
-                        <x-slot name="title">
-                            Confirm Order
-                        </x-slot>
-
-                        <x-slot name="content">
-                            Are you sure you want to place this order? Please review your details before confirming.
-                            <br><br>
-                            {{-- Optionally show summary again here --}}
-                            <strong>Total: ${{ number_format($total, 2) }}</strong>
-                        </x-slot>
-
-                        <x-slot name="footer">
-                            <x-secondary-button @click="confirmingOrder = false">
-                                Cancel
-                            </x-secondary-button>
-
-                            {{-- Removed wire:loading.attr if it existed, ensure type=submit works --}}
-                            <x-danger-button class="ms-3" type="submit" form="checkout-form">
-                                Place Order
-                            </x-danger-button>
-                        </x-slot>
-                    </x-confirmation-modal>
-                    {{-- End Confirmation Modal --}}
-
-                </div> {{-- End Alpine.js x-data --}}
+                </div>
 
             </div>
         </div>
     </div>
+
+    {{-- Add PayPal SDK Script --}}
+    {{-- Make sure the client ID is correctly passed from the controller --}}
+    @isset($paypalClientId)
+    <script src="https://www.paypal.com/sdk/js?client-id={{ $paypalClientId }}&currency={{ config('paypal.currency', 'USD') }}&intent=capture"></script>
+
+    <script>
+        // Check if cart is empty before rendering button
+        const cartIsEmpty = {{ empty($cart) ? 'true' : 'false' }};
+        const paypalErrorDiv = document.getElementById('paypal-error');
+
+        function showPayPalError(message) {
+            if (paypalErrorDiv) {
+                paypalErrorDiv.textContent = 'Error: ' + message + ' Please refresh the page or contact support.';
+                paypalErrorDiv.style.display = 'block';
+            }
+            console.error('PayPal Error:', message);
+        }
+
+        if (!cartIsEmpty) {
+            paypal.Buttons({
+                // Sets up the transaction when a payment button is clicked
+                createOrder: function(data, actions) {
+                    return fetch('{{ route('checkout.paypal.create') }}', { // Use the named route
+                        method: 'post',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include CSRF token
+                        },
+                        // No body needed if cart is read from session on backend
+                    }).then(function(res) {
+                        if (!res.ok) {
+                            // Handle non-JSON error responses or network errors
+                            return res.text().then(text => { throw new Error(text || 'Server error during order creation') });
+                        }
+                        return res.json();
+                    }).then(function(orderData) {
+                        if (orderData.id) {
+                            return orderData.id;
+                        } else {
+                            // Handle errors returned in JSON, e.g., { error: '...' }
+                            throw new Error(orderData.error || 'Could not retrieve PayPal order ID.');
+                        }
+                    }).catch(function(err) {
+                        showPayPalError(err.message);
+                        // Disable button or provide feedback
+                        // Example: actions.disable();
+                    });
+                },
+
+                // Finalize the transaction after payer approval
+                onApprove: function(data, actions) {
+                    // data.orderID contains the PayPal Order ID
+                    // Redirect the user to the success route, passing the order ID
+                    // The backend will capture the payment on this route
+                    window.location.href = '{{ route('checkout.paypal.success') }}?token=' + data.orderID;
+                },
+
+                // Handle cancellation by the user
+                onCancel: function(data) {
+                    // data.orderID contains the PayPal Order ID
+                    // Redirect the user to the cancel route
+                    window.location.href = '{{ route('checkout.paypal.cancel') }}';
+                },
+
+                // Handle errors from PayPal button actions
+                onError: function(err) {
+                    console.error('PayPal Button onError:', err);
+                    showPayPalError('An error occurred with the PayPal button.');
+                    // Optionally, re-enable the button or provide specific feedback
+                    // actions.enable();
+                }
+            }).render('#paypal-button-container').catch(function (err) {
+                 // Handle errors during button rendering
+                 console.error('PayPal Button Rendering Error:', err);
+                 showPayPalError('Could not render the PayPal button.');
+            });
+        } else {
+            // Optional: Display a message if cart is empty where the button would be
+            document.getElementById('paypal-button-container').innerHTML = '<p class="text-gray-500">Add items to your cart to proceed with payment.</p>';
+        }
+    </script>
+    @else
+        <p class="text-red-600 p-6">PayPal Client ID not configured. Payment cannot proceed.</p>
+    @endisset
+
 </x-app-layout>
