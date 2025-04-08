@@ -130,6 +130,14 @@
                             </x-slot>
                         </x-dropdown>
                     </div>
+
+                    {{-- Cart Link for Buyers --}}
+                    <x-nav-link href="{{ route('cart.index') }}" :active="request()->routeIs('cart.index')" class="flex items-center">
+                        <i class="fas fa-shopping-cart mr-2"></i>
+                        {{ __('Cart') }}
+                        {{-- Optional: Add cart count indicator here later --}}
+                    </x-nav-link>
+
                     @endif {{-- End Admin/Buyer specific links --}}
                 </div>
             </div>
@@ -349,6 +357,14 @@
                         </x-responsive-nav-link>
                     </div>
                 </div>
+
+                {{-- Responsive Cart Link for Buyers --}}
+                <x-responsive-nav-link href="{{ route('cart.index') }}" :active="request()->routeIs('cart.index')" class="flex items-center">
+                    <i class="fas fa-shopping-cart mr-2"></i>
+                    {{ __('Cart') }}
+                    {{-- Optional: Add cart count indicator here later --}}
+                </x-responsive-nav-link>
+
             @endif {{-- End Admin/Buyer specific responsive links --}}
         </div>
 

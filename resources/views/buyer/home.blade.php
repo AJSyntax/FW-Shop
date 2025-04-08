@@ -19,20 +19,27 @@
         {{-- Product Grid --}}
         <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             @forelse ($designs as $design)
-                <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                    {{-- Use design image path, provide alt text --}}
-                    <img alt="{{ $design->title }}" class="w-full h-48 object-cover" src="{{ $design->image_path ?? asset('placeholder.jpg') }}" /> {{-- Added placeholder fallback --}}
+                <div class="bg-white shadow-md rounded-lg overflow-hidden group"> {{-- Added group for potential hover effects --}}
+                    <a href="{{ route('designs.show', $design->id) }}">
+                        {{-- Use design image path, provide alt text --}}
+                        <img alt="{{ $design->title }}" class="w-full h-48 object-cover group-hover:opacity-75 transition duration-150 ease-in-out" src="{{ $design->image_path ?? asset('placeholder.jpg') }}" /> {{-- Added placeholder fallback and hover effect --}}
+                    </a>
                     <div class="p-4">
-                        <h2 class="text-lg font-semibold text-gray-800">
-                            {{ $design->title }}
-                        </h2>
+                        <a href="{{ route('designs.show', $design->id) }}">
+                            <h2 class="text-lg font-semibold text-gray-800 hover:text-blue-600">
+                                {{ $design->title }}
+                            </h2>
+                        </a>
                         <p class="text-gray-600 mt-2">
                             ${{ number_format($design->price, 2) }} {{-- Format price --}}
                         </p>
-                        {{-- TODO: Implement Add to Cart functionality --}}
-                        <button class="mt-4 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">
-                            Add to Cart
-                        </button>
+                        {{-- Add to Cart Form --}}
+                        <form action="{{ route('cart.add', $design->id) }}" method="POST" class="mt-4">
+                            @csrf
+                            <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">
+                                Add to Cart
+                            </button>
+                        </form>
                     </div>
                 </div>
             @empty

@@ -7,6 +7,8 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\CartController; // Import CartController
+use App\Http\Controllers\CheckoutController; // Import CheckoutController
 use Illuminate\Support\Facades\Auth; // Import Auth facade
 use App\Models\Design; // Import Design model
 
@@ -53,6 +55,14 @@ Route::middleware([
     Route::get('/orders/history', [OrderController::class, 'history'])->name('orders.history'); // Buyers see own history (controller logic needed)
     Route::get('/orders/track', [OrderController::class, 'track'])->name('orders.track'); // Buyers track own orders (controller logic needed)
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show'); // Admins see any, buyers see own (controller logic needed)
+
+    // Cart Routes (Buyers)
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add/{design}', [CartController::class, 'add'])->name('cart.add'); // Use POST for adding items
+
+    // Checkout Routes (Buyers)
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    // TODO: Add POST route for submitting checkout form
 
     // Generic dashboard - might be replaced by role-specific ones or redirect logic
     // Route::get('/dashboard', function () {

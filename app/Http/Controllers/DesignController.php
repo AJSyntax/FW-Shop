@@ -51,10 +51,59 @@ class DesignController extends Controller
         ]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $designs = Design::with('category')->paginate(12);
-        return view('designs.index', compact('designs'));
+        $query = Design::query()->with('category')->where('is_active', true); // Start query, only active designs
+
+        // Search
+        if ($request->filled('search')) {
+            $searchTerm = $request->input('search');
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('title', 'like', "%{$searchTerm}%")
+                  ->orWhere('description', 'like', "%{$searchTerm}%");
+            });
+        }
+
+        // Filter by Category
+        if ($request->filled('category') && $request->input('category') != '') {
+            $query->where('category_id', $request->input('category'));
+        }
+
+        // Sorting
+        $sort = $request->input('sort', 'newest'); // Default to newest
+        switch ($sort) {
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'newest':
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+        $designs = $query->paginate(12)->withQueryString(); // Paginate and append query string
+
+        $categories = Category::where('is_active', true)->orderBy('name')->get(); // Get active categories for filter
+
+        return view('designs.index', compact('designs', 'categories', 'request')); // Pass request for old input
+    }
+
+    /**
+     * Display the specified design.
+     *
+     * @param  \App\Models\Design  $design
+     * @return \Illuminate\View\View
+     */
+    public function show(Design $design)
+    {
+        // Ensure the design is active or handle appropriately if needed
+        // if (!$design->is_active) {
+        //     abort(404); // Or redirect, or show a specific message
+        // }
+        return view('designs.show', compact('design'));
     }
 
     public function create()
