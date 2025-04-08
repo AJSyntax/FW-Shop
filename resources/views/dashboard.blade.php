@@ -109,19 +109,21 @@
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
                     <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
                     <div class="grid grid-cols-2 gap-4">
-                        <a href="{{ route('designs.create') }}" class="flex items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100">
+                        {{-- Use admin prefixed routes for actions within the admin dashboard --}}
+                        <a href="{{ route('admin.designs.create') }}" class="flex items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100">
                             <i class="fas fa-plus text-blue-500 mr-3"></i>
                             <span>Add New Design</span>
                         </a>
+                        {{-- Note: orders.index is outside admin prefix, controller handles auth --}}
                         <a href="{{ route('orders.index') }}" class="flex items-center p-4 bg-green-50 rounded-lg hover:bg-green-100">
                             <i class="fas fa-shopping-cart text-green-500 mr-3"></i>
                             <span>View Orders</span>
                         </a>
-                        <a href="{{ route('users.index') }}" class="flex items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100">
+                        <a href="{{ route('admin.users.index') }}" class="flex items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100">
                             <i class="fas fa-users text-purple-500 mr-3"></i>
                             <span>Manage Users</span>
                         </a>
-                        <a href="{{ route('reports.index') }}" class="flex items-center p-4 bg-yellow-50 rounded-lg hover:bg-yellow-100">
+                        <a href="{{ route('admin.reports.index') }}" class="flex items-center p-4 bg-yellow-50 rounded-lg hover:bg-yellow-100">
                             <i class="fas fa-chart-line text-yellow-500 mr-3"></i>
                             <span>View Reports</span>
                         </a>

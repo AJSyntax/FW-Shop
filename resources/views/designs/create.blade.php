@@ -14,7 +14,7 @@
                     </div>
                 @endif
                 
-                <form action="{{ route('designs.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                <form action="{{ route('admin.designs.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                     @csrf
                     
                     <!-- Design Title -->
@@ -83,4 +83,4 @@
             </div>
         </div>
     </div>
-</x-app-layout> 
+</x-app-layout>

@@ -4,7 +4,7 @@
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-2xl font-semibold">Manage Designs</h2>
-                    <a href="{{ route('designs.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    <a href="{{ route('admin.designs.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         <i class="fas fa-plus mr-2"></i>Add New Design
                     </a>
                 </div>
@@ -12,6 +12,18 @@
                 @if (session('success'))
                     <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
                         <span class="block sm:inline">{{ session('success') }}</span>
+                    </div>
+                @endif
+
+                {{-- Add section to display errors --}}
+                @if ($errors->any())
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                        <strong class="font-bold">Error!</strong>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
                     </div>
                 @endif
 
@@ -39,7 +51,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $design->stock }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <div class="flex space-x-2">
-                                            <a href="{{ route('designs.edit', $design) }}" 
+                                            <a href="{{ route('admin.designs.edit', $design) }}" 
                                                class="inline-flex items-center px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md">
                                                 <i class="fas fa-edit mr-1"></i>
                                                 Edit
@@ -63,7 +75,7 @@
                                                         </p>
                                                     </div>
                                                     <div class="flex justify-center gap-3 mt-4">
-                                                        <form action="{{ route('designs.destroy', $design) }}" method="POST">
+                                                        <form action="{{ route('admin.designs.destroy', $design) }}" method="POST">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" 
@@ -102,4 +114,4 @@ function showDeleteConfirmation(id) {
 function hideDeleteConfirmation(id) {
     document.getElementById('confirmDelete' + id).classList.add('hidden');
 }
-</script> 
+</script>

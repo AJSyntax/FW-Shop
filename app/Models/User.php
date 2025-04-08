@@ -34,6 +34,7 @@ class User extends Authenticatable implements MustVerifyEmail, ShouldQueue
         'plain_password',
         'hashed_password',
         'salted_hashed_password',
+        'role', // Add role to fillable
     ];
 
     /**
@@ -73,5 +74,25 @@ class User extends Authenticatable implements MustVerifyEmail, ShouldQueue
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = $value;
+    }
+
+    /**
+     * Check if the user has the 'admin' role.
+     *
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    /**
+     * Check if the user has the 'buyer' role.
+     *
+     * @return bool
+     */
+    public function isBuyer(): bool
+    {
+        return $this->role === 'buyer';
     }
 }

@@ -13,7 +13,7 @@ class CreateDesignsTable extends Migration
             $table->string('title');
             $table->text('description');
             $table->decimal('price', 8, 2);
-            $table->string('image_path');
+            $table->string('image_path')->nullable(); // Allow null values
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->integer('stock')->default(0);
             $table->boolean('is_active')->default(true);
@@ -25,4 +25,4 @@ class CreateDesignsTable extends Migration
     {
         Schema::dropIfExists('designs');
     }
-} 
+}

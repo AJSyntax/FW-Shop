@@ -34,8 +34,12 @@ class CategorySeeder extends Seeder
             ]
         ];
 
-        foreach ($categories as $category) {
-            Category::create($category);
+        foreach ($categories as $categoryData) {
+            // Use updateOrCreate to avoid duplicate entries based on the slug
+            Category::updateOrCreate(
+                ['slug' => $categoryData['slug']], // Find by slug
+                $categoryData // Data to create or update with
+            );
         }
     }
 }
