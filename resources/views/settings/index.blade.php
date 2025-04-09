@@ -10,19 +10,19 @@
                     </div>
                 @endif
 
-                <form action="{{ route('settings.update') }}" method="POST" class="space-y-6">
+                <form action="{{ route('admin.settings.update') }}" method="POST" class="space-y-6">
                     @csrf
                     @method('PUT')
 
                     <!-- General Settings -->
                     <div class="bg-gray-50 rounded-lg p-6">
                         <h3 class="text-lg font-medium text-gray-900 mb-4">General Settings</h3>
-                        
+
                         <div class="grid grid-cols-1 gap-6">
                             <!-- Site Name -->
                             <div>
                                 <label for="site_name" class="block text-sm font-medium text-gray-700">Site Name</label>
-                                <input type="text" name="site_name" id="site_name" 
+                                <input type="text" name="site_name" id="site_name"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                     value="{{ $settings['site_name'] ?? config('app.name') }}">
                             </div>
@@ -30,7 +30,7 @@
                             <!-- Contact Email -->
                             <div>
                                 <label for="contact_email" class="block text-sm font-medium text-gray-700">Contact Email</label>
-                                <input type="email" name="contact_email" id="contact_email" 
+                                <input type="email" name="contact_email" id="contact_email"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                     value="{{ $settings['contact_email'] ?? '' }}">
                             </div>
@@ -40,7 +40,7 @@
                     <!-- Order Settings -->
                     <div class="bg-gray-50 rounded-lg p-6">
                         <h3 class="text-lg font-medium text-gray-900 mb-4">Order Settings</h3>
-                        
+
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Minimum Order Amount -->
                             <div>
@@ -49,7 +49,7 @@
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <span class="text-gray-500 sm:text-sm">$</span>
                                     </div>
-                                    <input type="number" name="min_order_amount" id="min_order_amount" 
+                                    <input type="number" name="min_order_amount" id="min_order_amount"
                                         class="pl-7 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                         value="{{ $settings['min_order_amount'] ?? '0' }}"
                                         step="0.01">
@@ -59,7 +59,7 @@
                             <!-- Tax Rate -->
                             <div>
                                 <label for="tax_rate" class="block text-sm font-medium text-gray-700">Tax Rate (%)</label>
-                                <input type="number" name="tax_rate" id="tax_rate" 
+                                <input type="number" name="tax_rate" id="tax_rate"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                     value="{{ $settings['tax_rate'] ?? '0' }}"
                                     step="0.01">
@@ -70,10 +70,10 @@
                     <!-- Notification Settings -->
                     <div class="bg-gray-50 rounded-lg p-6">
                         <h3 class="text-lg font-medium text-gray-900 mb-4">Notification Settings</h3>
-                        
+
                         <div class="space-y-4">
                             <div class="flex items-center">
-                                <input type="checkbox" name="order_confirmation_email" id="order_confirmation_email" 
+                                <input type="checkbox" name="order_confirmation_email" id="order_confirmation_email"
                                     class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                     {{ ($settings['order_confirmation_email'] ?? true) ? 'checked' : '' }}>
                                 <label for="order_confirmation_email" class="ml-2 block text-sm text-gray-900">
@@ -82,7 +82,7 @@
                             </div>
 
                             <div class="flex items-center">
-                                <input type="checkbox" name="inventory_alerts" id="inventory_alerts" 
+                                <input type="checkbox" name="inventory_alerts" id="inventory_alerts"
                                     class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                     {{ ($settings['inventory_alerts'] ?? true) ? 'checked' : '' }}>
                                 <label for="inventory_alerts" class="ml-2 block text-sm text-gray-900">
@@ -101,4 +101,4 @@
             </div>
         </div>
     </div>
-</x-app-layout> 
+</x-app-layout>
