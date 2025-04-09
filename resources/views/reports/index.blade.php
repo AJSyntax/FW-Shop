@@ -7,7 +7,7 @@
                 <!-- Report Cards Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                     <!-- Sales Report Card -->
-                    <a href="{{ route('reports.sales') }}" class="block p-6 bg-blue-50 rounded-lg hover:bg-blue-100 transition">
+                    <a href="{{ route('admin.reports.sales') }}" class="block p-6 bg-blue-50 rounded-lg hover:bg-blue-100 transition">
                         <div class="flex items-center">
                             <div class="p-3 rounded-full bg-blue-500 text-white">
                                 <i class="fas fa-chart-line text-2xl"></i>
@@ -20,7 +20,7 @@
                     </a>
 
                     <!-- Orders Report Card -->
-                    <a href="{{ route('reports.orders') }}" class="block p-6 bg-green-50 rounded-lg hover:bg-green-100 transition">
+                    <a href="{{ route('admin.reports.orders') }}" class="block p-6 bg-green-50 rounded-lg hover:bg-green-100 transition">
                         <div class="flex items-center">
                             <div class="p-3 rounded-full bg-green-500 text-white">
                                 <i class="fas fa-shopping-cart text-2xl"></i>
@@ -33,7 +33,7 @@
                     </a>
 
                     <!-- Users Report Card -->
-                    <a href="{{ route('reports.users') }}" class="block p-6 bg-purple-50 rounded-lg hover:bg-purple-100 transition">
+                    <a href="{{ route('admin.reports.users') }}" class="block p-6 bg-purple-50 rounded-lg hover:bg-purple-100 transition">
                         <div class="flex items-center">
                             <div class="p-3 rounded-full bg-purple-500 text-white">
                                 <i class="fas fa-users text-2xl"></i>
@@ -80,4 +80,4 @@
             </div>
         </div>
     </div>
-</x-app-layout> 
+</x-app-layout>

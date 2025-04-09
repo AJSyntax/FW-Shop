@@ -38,10 +38,7 @@ class CartController extends Controller
         $design = Design::findOrFail($id);
         $cart = Session::get('cart', []);
 
-        // Check stock
-        if ($design->stock <= 0) {
-            return redirect()->back()->with('error', 'This item is out of stock.');
-        }
+        // Stock check removed as digital products have unlimited downloads
 
         // Check if item already exists in cart
         if (isset($cart[$id])) {

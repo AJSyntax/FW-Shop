@@ -66,11 +66,7 @@
                         </x-dropdown>
                     </div>
 
-                    {{-- Use admin prefixed route --}}
-                    <x-nav-link href="{{ route('admin.categories.index') }}" :active="request()->routeIs('admin.categories.*')" class="flex items-center">
-                        <i class="fas fa-tags mr-2"></i>
-                        {{ __('Manage Categories') }}
-                    </x-nav-link>
+                    {{-- Categories management removed as requested --}}
 
                     {{-- Admin Order Management Link --}}
                     <x-nav-link href="{{ route('orders.index') }}" :active="request()->routeIs('orders.index')" class="flex items-center"> {{-- Keep non-prefixed route for now, controller handles logic --}}
@@ -121,11 +117,6 @@
                                 <x-dropdown-link href="{{ route('orders.history') }}" class="flex items-center">
                                     <i class="fas fa-history mr-2"></i>
                                     {{ __('Order History') }}
-                                </x-dropdown-link>
-
-                                <x-dropdown-link href="{{ route('orders.track') }}" class="flex items-center">
-                                    <i class="fas fa-truck-loading mr-2"></i> {{-- Changed Icon --}}
-                                    {{ __('Track My Order') }}
                                 </x-dropdown-link>
                             </x-slot>
                         </x-dropdown>
@@ -305,11 +296,7 @@
                     </div>
                 </div>
 
-                {{-- Manage Categories Link --}}
-                <x-responsive-nav-link href="{{ route('admin.categories.index') }}" :active="request()->routeIs('admin.categories.*')">
-                    <i class="fas fa-tags mr-2"></i>
-                    {{ __('Manage Categories') }}
-                </x-responsive-nav-link>
+                {{-- Categories management removed as requested --}}
 
                 {{-- Manage Orders Link --}}
                  <x-responsive-nav-link href="{{ route('orders.index') }}" :active="request()->routeIs('orders.index')">
@@ -350,10 +337,6 @@
                         <x-responsive-nav-link href="{{ route('orders.history') }}" class="flex items-center">
                             <i class="fas fa-history mr-2"></i>
                             {{ __('Order History') }}
-                        </x-responsive-nav-link>
-                        <x-responsive-nav-link href="{{ route('orders.track') }}" class="flex items-center">
-                            <i class="fas fa-truck-loading mr-2"></i>
-                            {{ __('Track My Order') }}
                         </x-responsive-nav-link>
                     </div>
                 </div>

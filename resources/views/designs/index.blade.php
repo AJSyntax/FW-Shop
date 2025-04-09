@@ -72,18 +72,12 @@
                             <p class="text-lg font-bold mt-auto mb-3">${{ number_format($design->price, 2) }}</p>
 
                             {{-- Add to Cart Form --}}
-                            @if($design->stock > 0)
-                                <form action="{{ route('cart.add', $design->id) }}" method="POST" class="mt-auto">
-                                    @csrf
-                                    <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 text-sm">
-                                        Add to Cart
-                                    </button>
-                                </form>
-                            @else
-                                <button type="button" class="w-full mt-auto bg-gray-400 text-white py-2 rounded-lg text-sm cursor-not-allowed" disabled>
-                                    Out of Stock
+                            <form action="{{ route('cart.add', $design->id) }}" method="POST" class="mt-auto">
+                                @csrf
+                                <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 text-sm">
+                                    Add to Cart
                                 </button>
-                            @endif
+                            </form>
                         </div>
                     </div>
                 @empty

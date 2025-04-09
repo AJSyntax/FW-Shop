@@ -35,7 +35,7 @@
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
+                                {{-- Stock column removed as digital products have unlimited downloads --}}
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
@@ -48,15 +48,15 @@
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $design->title }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $design->category->name }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">${{ $design->price }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ $design->stock }}</td>
+                                    {{-- Stock column removed as digital products have unlimited downloads --}}
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <div class="flex space-x-2">
-                                            <a href="{{ route('admin.designs.edit', $design) }}" 
+                                            <a href="{{ route('admin.designs.edit', $design) }}"
                                                class="inline-flex items-center px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md">
                                                 <i class="fas fa-edit mr-1"></i>
                                                 Edit
                                             </a>
-                                            <button type="button" 
+                                            <button type="button"
                                                     onclick="showDeleteConfirmation({{ $design->id }})"
                                                     class="inline-flex items-center px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md">
                                                 <i class="fas fa-trash mr-1"></i>
@@ -78,7 +78,7 @@
                                                         <form action="{{ route('admin.designs.destroy', $design) }}" method="POST">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" 
+                                                            <button type="submit"
                                                                     class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md">
                                                                 Yes, Delete
                                                             </button>

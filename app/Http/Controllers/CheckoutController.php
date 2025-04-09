@@ -180,7 +180,7 @@ class CheckoutController extends Controller
                             'quantity' => $details['quantity'],
                             'price' => $details['price'],
                         ]);
-                        // Optional: Decrement stock
+                        // No stock management needed for digital products
                     }
 
                     DB::commit();
@@ -273,7 +273,7 @@ class CheckoutController extends Controller
                     'quantity' => $details['quantity'],
                     'price' => $details['price'],
                 ]);
-                // Optional: Decrement stock
+                // No stock management needed for digital products
             }
 
             DB::commit();

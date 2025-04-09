@@ -10,6 +10,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Models\Order;
 
 class User extends Authenticatable implements MustVerifyEmail, ShouldQueue
 {
@@ -94,5 +95,15 @@ class User extends Authenticatable implements MustVerifyEmail, ShouldQueue
     public function isBuyer(): bool
     {
         return $this->role === 'buyer';
+    }
+
+    /**
+     * Get the orders for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 }

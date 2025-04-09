@@ -88,19 +88,7 @@ Route::middleware([
     'admin', // Apply the admin middleware
 ])->prefix('admin')->name('admin.')->group(function () { // Prefix routes with 'admin/' and names with 'admin.'
 
-    Route::get('/dashboard', function () {
-        // Count pending orders for admin notification
-        $pendingOrdersCount = \App\Models\Order::pending()->count();
-
-        // Get recent orders with a focus on pending ones
-        $recentOrders = \App\Models\Order::with('user')
-            ->latest()
-            ->take(5)
-            ->get();
-
-        // This could be the original dashboard view or a specific admin one
-        return view('dashboard', compact('pendingOrdersCount', 'recentOrders')); // Pass data to the view
-    })->name('dashboard'); // admin.dashboard
+    Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard'); // admin.dashboard
 
     // Design Management (Admin only)
     Route::get('/designs/manage', [DesignController::class, 'manage'])->name('designs.manage'); // admin.designs.manage
@@ -111,8 +99,7 @@ Route::middleware([
     Route::put('/designs/{design}', [DesignController::class, 'update'])->name('designs.update'); // admin.designs.update
     Route::delete('/designs/{design}', [DesignController::class, 'destroy'])->name('designs.destroy'); // admin.designs.destroy
 
-    // Categories (Admin only)
-    Route::resource('categories', CategoryController::class)->except(['show']); // admin.categories.* (show might be public?)
+    // Categories routes removed as requested
 
     // Order Management (Admin only actions)
     Route::put('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.update.status');

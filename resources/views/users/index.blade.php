@@ -43,14 +43,14 @@
                                         <div class="text-sm text-gray-900">{{ $user->created_at->format('M d, Y') }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
                                             {{ $user->is_blocked ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800' }}">
                                             {{ $user->is_blocked ? 'Blocked' : 'Active' }}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <a href="{{ route('users.show', $user) }}" class="text-blue-600 hover:text-blue-900 mr-3">View</a>
-                                        <form action="{{ route('users.toggle-block', $user) }}" method="POST" class="inline">
+                                        <a href="{{ route('admin.users.show', $user) }}" class="text-blue-600 hover:text-blue-900 mr-3">View</a>
+                                        <form action="{{ route('admin.users.toggle-block', $user) }}" method="POST" class="inline">
                                             @csrf
                                             @method('PUT')
                                             <button type="submit" class="text-{{ $user->is_blocked ? 'green' : 'red' }}-600 hover:text-{{ $user->is_blocked ? 'green' : 'red' }}-900">
@@ -78,4 +78,4 @@
             </div>
         </div>
     </div>
-</x-app-layout> 
+</x-app-layout>

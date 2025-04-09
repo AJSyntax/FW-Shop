@@ -33,28 +33,15 @@
                             <span class="text-3xl font-semibold text-gray-900">${{ number_format($design->price, 2) }}</span>
                         </div>
 
-                        <div class="mb-6">
-                            @if($design->stock > 0)
-                                <span class="inline-block bg-green-200 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">In Stock ({{ $design->stock }} available)</span>
-                            @else
-                                <span class="inline-block bg-red-200 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">Out of Stock</span>
-                            @endif
-                        </div>
+                        {{-- Stock display removed as digital products have unlimited downloads --}}
 
                         {{-- Add to Cart Form --}}
-                        @if($design->stock > 0)
-                            <form action="{{ route('cart.add', $design->id) }}" method="POST">
-                                @csrf
-                                {{-- Quantity input removed --}}
-                                <button type="submit" class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150 ease-in-out">
-                                    Add to Cart
-                                </button>
-                            </form>
-                        @else
-                             <button type="button" class="w-full bg-gray-400 text-white py-3 px-6 rounded-lg cursor-not-allowed" disabled>
-                                Out of Stock
+                        <form action="{{ route('cart.add', $design->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150 ease-in-out">
+                                Add to Cart
                             </button>
-                        @endif
+                        </form>
 
                         {{-- Back Button --}}
                          <div class="mt-6">

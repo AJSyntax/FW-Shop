@@ -24,7 +24,7 @@ class DesignController extends Controller
             'url' => [
                 'secure' => true, // Keep using HTTPS
                 // Disable SSL verification for local development ONLY
-                'secure_distribution' => null, 
+                'secure_distribution' => null,
                 'private_cdn' => false,
                 'cname' => null,
                 'secure_cdn_subdomain' => false,
@@ -34,7 +34,7 @@ class DesignController extends Controller
                 'upload_options' => [
                     // Pass Guzzle client options here (keep for good measure)
                     'client_config' => [
-                        'verify' => false, 
+                        'verify' => false,
                     ],
                     // Add direct cURL options for upload
                     'curl' => [
@@ -119,9 +119,8 @@ class DesignController extends Controller
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'stock' => 'required|integer|min:0'
-        ]); 
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
 
         $uploadedImagePath = null;
         $uploadWarning = null;
@@ -148,7 +147,7 @@ class DesignController extends Controller
                 \Log::error("Cloudinary upload failed: " . $e->getMessage());
                 $uploadWarning = 'Design saved to database, but image upload failed (likely SSL issue in local env). Error: ' . $e->getMessage();
                 // Ensure $uploadedImagePath remains null
-                $uploadedImagePath = null; 
+                $uploadedImagePath = null;
             }
         } else {
             // This case should ideally be caught by validation, but return error if reached
@@ -199,31 +198,32 @@ class DesignController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0'
+            'price' => 'required|numeric|min:0'
         ]);
+
+        // Stock field has been removed as digital products have unlimited downloads
 
         try {
             $design->update($validated);
-            
+
             return redirect()
                 ->route('admin.designs.manage') // Use admin prefix
                 ->with('success', 'Design updated successfully!');
-            
+
         } catch (\Exception $e) {
             \Log::error('Design update error: ' . $e->getMessage());
-            
+
             // Revert to generic error message
             return back()
                 ->withInput()
-                ->withErrors(['error' => 'Failed to update design. Please try again.']); 
+                ->withErrors(['error' => 'Failed to update design. Please try again.']);
         }
     }
 
     public function destroy(Design $design)
     {
         // Use DB transaction for atomicity
-        \Illuminate\Support\Facades\DB::beginTransaction(); 
+        \Illuminate\Support\Facades\DB::beginTransaction();
         try {
             $publicId = null; // Initialize publicId
             $destroyWarning = null; // Flag for destroy warning
@@ -267,16 +267,16 @@ class DesignController extends Controller
             $redirect = redirect()->route('admin.designs.manage')->with('success', 'Design deleted successfully!');
              if ($destroyWarning) {
                 // Add the warning message if the destroy failed
-                $redirect->with('warning', $destroyWarning); 
+                $redirect->with('warning', $destroyWarning);
             }
             return $redirect;
-            
+
         } catch (\Exception $e) { // Catch errors during DB deletion
             \Illuminate\Support\Facades\DB::rollBack(); // Rollback transaction on error
-            \Log::error('Design database deletion error for ID ' . $design->id . ': ' . $e->getMessage()); 
-            
+            \Log::error('Design database deletion error for ID ' . $design->id . ': ' . $e->getMessage());
+
             // Return generic error message for database issues
-            return back()->withErrors(['error' => 'Failed to delete design from database. Please try again. Error: ' . $e->getMessage()]); 
+            return back()->withErrors(['error' => 'Failed to delete design from database. Please try again. Error: ' . $e->getMessage()]);
         }
     }
 }

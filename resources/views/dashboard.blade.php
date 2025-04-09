@@ -11,8 +11,10 @@
                         </div>
                         <div class="ml-4">
                             <p class="text-gray-500">Total Sales</p>
-                            <h3 class="text-2xl font-bold">$15,350</h3>
-                            <p class="text-green-500 text-sm">+12% from last month</p>
+                            <h3 class="text-2xl font-bold">${{ number_format($totalSales ?? 0, 2) }}</h3>
+                            <p class="{{ ($salesPercentChange ?? 0) >= 0 ? 'text-green-500' : 'text-red-500' }} text-sm">
+                                {{ ($salesPercentChange ?? 0) >= 0 ? '+' : '' }}{{ $salesPercentChange ?? 0 }}% from last month
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -25,8 +27,10 @@
                         </div>
                         <div class="ml-4">
                             <p class="text-gray-500">Total Orders</p>
-                            <h3 class="text-2xl font-bold">256</h3>
-                            <p class="text-green-500 text-sm">+5% from last month</p>
+                            <h3 class="text-2xl font-bold">{{ $totalOrders ?? 0 }}</h3>
+                            <p class="{{ ($ordersPercentChange ?? 0) >= 0 ? 'text-green-500' : 'text-red-500' }} text-sm">
+                                {{ ($ordersPercentChange ?? 0) >= 0 ? '+' : '' }}{{ $ordersPercentChange ?? 0 }}% from last month
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -39,8 +43,10 @@
                         </div>
                         <div class="ml-4">
                             <p class="text-gray-500">Active Users</p>
-                            <h3 class="text-2xl font-bold">1,245</h3>
-                            <p class="text-green-500 text-sm">+8% from last month</p>
+                            <h3 class="text-2xl font-bold">{{ $activeUsers ?? 0 }}</h3>
+                            <p class="{{ ($usersPercentChange ?? 0) >= 0 ? 'text-green-500' : 'text-red-500' }} text-sm">
+                                {{ ($usersPercentChange ?? 0) >= 0 ? '+' : '' }}{{ $usersPercentChange ?? 0 }}% from last month
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -53,8 +59,8 @@
                         </div>
                         <div class="ml-4">
                             <p class="text-gray-500">Total Designs</p>
-                            <h3 class="text-2xl font-bold">85</h3>
-                            <p class="text-green-500 text-sm">+3 new this month</p>
+                            <h3 class="text-2xl font-bold">{{ $totalDesigns ?? 0 }}</h3>
+                            <p class="text-green-500 text-sm">+{{ $designsThisMonth ?? 0 }} new this month</p>
                         </div>
                     </div>
                 </div>
@@ -117,14 +123,17 @@
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
                     <h2 class="text-xl font-semibold mb-4">Popular Designs</h2>
                     <div class="space-y-4">
-                        <div class="flex items-center">
-                            <img src="https://res.cloudinary.com/dmygblav6/image/upload/v1738328684/3_emrheh.png" alt="Design 1" class="w-16 h-16 object-cover rounded">
-                            <div class="ml-4">
-                                <h4 class="font-medium">Cool T-Shirt Design</h4>
-                                <p class="text-gray-500">45 sales this month</p>
+                        @forelse($popularDesigns ?? [] as $design)
+                            <div class="flex items-center">
+                                <img src="{{ $design->image_path }}" alt="{{ $design->title }}" class="w-16 h-16 object-cover rounded">
+                                <div class="ml-4">
+                                    <h4 class="font-medium">{{ $design->title }}</h4>
+                                    <p class="text-gray-500">{{ $design->sales_count }} {{ Str::plural('sale', $design->sales_count) }}</p>
+                                </div>
                             </div>
-                        </div>
-                        <!-- Add more designs -->
+                        @empty
+                            <p class="text-gray-500">No sales data available yet.</p>
+                        @endforelse
                     </div>
                 </div>
 

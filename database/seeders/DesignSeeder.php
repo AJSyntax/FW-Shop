@@ -32,7 +32,6 @@ class DesignSeeder extends Seeder
                 'description' => 'A vibrant t-shirt with a colorful abstract pattern.',
                 'price' => 20.00,
                 'image_path' => 'https://storage.googleapis.com/a1aa/image/QurtA2cSeO9dgnH68LxjlF-2JJFI8rfW-IeNdnFa6X8.jpg',
-                'stock' => 50,
                 'category_id' => $defaultCategory->id,
             ],
             [
@@ -40,7 +39,6 @@ class DesignSeeder extends Seeder
                 'description' => 'A serene t-shirt featuring a minimalist mountain landscape.',
                 'price' => 22.00,
                 'image_path' => 'https://storage.googleapis.com/a1aa/image/asobplZwf25QXU-_Gh8UY2omLSWqv9uJKjh0U_9KJCI.jpg',
-                'stock' => 45,
                 'category_id' => $defaultCategory->id,
             ],
             [
@@ -48,7 +46,6 @@ class DesignSeeder extends Seeder
                 'description' => 'A cool t-shirt with a classic vintage car illustration.',
                 'price' => 25.00,
                 'image_path' => 'https://storage.googleapis.com/a1aa/image/q0FMDcuxb_LkY2rrALB4yoqjYK-aPLrHwtgVenZkydI.jpg',
-                'stock' => 30,
                 'category_id' => $defaultCategory->id,
             ],
             [
@@ -56,7 +53,6 @@ class DesignSeeder extends Seeder
                 'description' => 'An elegant t-shirt adorned with a beautiful floral pattern.',
                 'price' => 18.00,
                 'image_path' => 'https://storage.googleapis.com/a1aa/image/ra9EnNmeTaOXou_6TG1VswBZrY_wv7NSAPfKhgS96HQ.jpg',
-                'stock' => 60,
                 'category_id' => $defaultCategory->id,
             ],
             [
@@ -64,7 +60,6 @@ class DesignSeeder extends Seeder
                 'description' => 'A modern t-shirt featuring a pattern of geometric shapes.',
                 'price' => 19.00,
                 'image_path' => 'https://storage.googleapis.com/a1aa/image/cc_JGN7FUZYeuwmAxIXeQVk32A_r3w54WvBtxujfOPk.jpg',
-                'stock' => 55,
                 'category_id' => $defaultCategory->id,
             ],
             [
@@ -72,7 +67,6 @@ class DesignSeeder extends Seeder
                 'description' => 'An adventurous t-shirt with a captivating space theme illustration.',
                 'price' => 23.00,
                 'image_path' => 'https://storage.googleapis.com/a1aa/image/rcUwa3AcoSdAAel-bBJ-06XVTtQ4nFt0zNecmmVhbaQ.jpg',
-                'stock' => 40,
                 'category_id' => $defaultCategory->id,
             ],
              [
@@ -80,7 +74,6 @@ class DesignSeeder extends Seeder
                 'description' => 'Relax with this t-shirt featuring a tropical beach illustration.',
                 'price' => 21.00,
                 'image_path' => 'https://storage.googleapis.com/a1aa/image/RjZ-v13H736ACYp0iI95pDr7wCpRhA2aLtNYrlMvXE0.jpg',
-                'stock' => 48,
                 'category_id' => $defaultCategory->id,
             ],
             [
@@ -88,7 +81,6 @@ class DesignSeeder extends Seeder
                 'description' => 'Show your urban style with this city skyline t-shirt.',
                 'price' => 24.00,
                 'image_path' => 'https://storage.googleapis.com/a1aa/image/FS82Pmxc7tOBHjMYi15zeV5etGltEEuI-u2y1BxBBHM.jpg',
-                'stock' => 35,
                 'category_id' => $defaultCategory->id,
             ],
             // Add more designs if needed...

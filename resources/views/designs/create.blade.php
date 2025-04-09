@@ -3,7 +3,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
                 <h2 class="text-2xl font-semibold mb-4">Add New Design</h2>
-                
+
                 @if ($errors->any())
                     <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
                         <ul>
@@ -13,10 +13,10 @@
                         </ul>
                     </div>
                 @endif
-                
+
                 <form action="{{ route('admin.designs.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                     @csrf
-                    
+
                     <!-- Design Title -->
                     <div>
                         <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
@@ -46,11 +46,7 @@
                         </select>
                     </div>
 
-                    <!-- Stock -->
-                    <div>
-                        <label for="stock" class="block text-sm font-medium text-gray-700">Stock</label>
-                        <input type="number" name="stock" id="stock" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
-                    </div>
+                    <!-- Stock field removed as digital products have unlimited downloads -->
 
                     <!-- Design Image Upload -->
                     <div>

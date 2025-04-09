@@ -10,14 +10,13 @@ class Design extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 'description', 'price', 'image_path', 
-        'category_id', 'stock', 'is_active'
+        'title', 'description', 'price', 'image_path',
+        'category_id', 'is_active'
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
-        'is_active' => 'boolean',
-        'stock' => 'integer'
+        'is_active' => 'boolean'
     ];
 
     public function category()
@@ -34,4 +33,4 @@ class Design extends Model
     {
         return $this->image_path ?? 'https://via.placeholder.com/150';
     }
-} 
+}
