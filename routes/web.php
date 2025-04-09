@@ -12,6 +12,9 @@ use App\Http\Controllers\CheckoutController; // Import CheckoutController
 use Illuminate\Support\Facades\Auth; // Import Auth facade
 use App\Models\Design; // Import Design model
 
+// Include authentication routes
+require __DIR__.'/auth.php';
+
 // Public routes
 Route::get('/', function () {
     // If authenticated, redirect based on role, otherwise show welcome

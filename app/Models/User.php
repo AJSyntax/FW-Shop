@@ -11,6 +11,7 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Models\Order;
+use App\Models\SecurityQuestion;
 
 class User extends Authenticatable implements MustVerifyEmail, ShouldQueue
 {
@@ -36,6 +37,10 @@ class User extends Authenticatable implements MustVerifyEmail, ShouldQueue
         'hashed_password',
         'salted_hashed_password',
         'role', // Add role to fillable
+        'security_question_1_id',
+        'security_answer_1',
+        'security_question_2_id',
+        'security_answer_2',
     ];
 
     /**
@@ -105,5 +110,36 @@ class User extends Authenticatable implements MustVerifyEmail, ShouldQueue
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+
+    /**
+     * Get the first security question for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function securityQuestion1()
+    {
+        return $this->belongsTo(SecurityQuestion::class, 'security_question_1_id');
+    }
+
+    /**
+     * Get the second security question for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function securityQuestion2()
+    {
+        return $this->belongsTo(SecurityQuestion::class, 'security_question_2_id');
+    }
+
+    /**
+     * Check if the user has set up security questions.
+     *
+     * @return bool
+     */
+    public function hasSecurityQuestions(): bool
+    {
+        return !is_null($this->security_question_1_id) && !is_null($this->security_answer_1) &&
+               !is_null($this->security_question_2_id) && !is_null($this->security_answer_2);
     }
 }

@@ -42,6 +42,7 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class, // Ensure categories are seeded first
             DesignSeeder::class,   // Add the DesignSeeder
             SettingsSeeder::class,
+            SecurityQuestionSeeder::class, // Add security questions
             // ... other seeders if any
         ]);
     }
