@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Order extends Model
 {
@@ -11,8 +12,20 @@ class Order extends Model
 
     protected $fillable = [
         'user_id', 'order_number', 'total_amount', 'status',
-        'shipping_address', 'billing_address', 'payment_status'
+        'shipping_address', 'billing_address', 'payment_status',
+        'payment_method', 'transaction_id'
     ];
+
+    /**
+     * Scope a query to only include pending orders.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopePending(Builder $query): Builder
+    {
+        return $query->where('status', 'pending');
+    }
 
     public function user()
     {
@@ -23,4 +36,4 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
-} 
+}

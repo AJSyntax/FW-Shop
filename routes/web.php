@@ -55,6 +55,8 @@ Route::middleware([
     Route::get('/orders/history', [OrderController::class, 'history'])->name('orders.history'); // Buyers see own history (controller logic needed)
     Route::get('/orders/track', [OrderController::class, 'track'])->name('orders.track'); // Buyers track own orders (controller logic needed)
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show'); // Admins see any, buyers see own (controller logic needed)
+    Route::get('/orders/{order}/designs/download-all', [OrderController::class, 'downloadAllDesigns'])->name('orders.designs.download-all'); // Download all designs as zip
+    Route::get('/orders/{order}/designs/{design}/download', [OrderController::class, 'downloadDesign'])->name('orders.designs.download'); // Download single design file
 
     // Cart Routes (Buyers)
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
@@ -64,13 +66,8 @@ Route::middleware([
 
     // Checkout Routes (Buyers)
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-    // Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store'); // Old route, replaced by PayPal flow
+    Route::post('/checkout/process', [CheckoutController::class, 'processStandardCheckout'])->name('checkout.process');
     Route::get('/checkout/success/{order}', [CheckoutController::class, 'success'])->name('checkout.success'); // Show order success page
-
-    // PayPal Checkout Routes
-    Route::post('/checkout/paypal/create', [CheckoutController::class, 'payWithPayPal'])->name('checkout.paypal.create');
-    Route::get('/checkout/paypal/success', [CheckoutController::class, 'paypalSuccess'])->name('checkout.paypal.success');
-    Route::get('/checkout/paypal/cancel', [CheckoutController::class, 'paypalCancel'])->name('checkout.paypal.cancel');
 
     // Generic dashboard - might be replaced by role-specific ones or redirect logic
     // Route::get('/dashboard', function () {
@@ -92,8 +89,17 @@ Route::middleware([
 ])->prefix('admin')->name('admin.')->group(function () { // Prefix routes with 'admin/' and names with 'admin.'
 
     Route::get('/dashboard', function () {
+        // Count pending orders for admin notification
+        $pendingOrdersCount = \App\Models\Order::pending()->count();
+
+        // Get recent orders with a focus on pending ones
+        $recentOrders = \App\Models\Order::with('user')
+            ->latest()
+            ->take(5)
+            ->get();
+
         // This could be the original dashboard view or a specific admin one
-        return view('dashboard'); // Or redirect to a specific admin dashboard view if created
+        return view('dashboard', compact('pendingOrdersCount', 'recentOrders')); // Pass data to the view
     })->name('dashboard'); // admin.dashboard
 
     // Design Management (Admin only)
@@ -109,7 +115,7 @@ Route::middleware([
     Route::resource('categories', CategoryController::class)->except(['show']); // admin.categories.* (show might be public?)
 
     // Order Management (Admin only actions)
-    Route::put('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.update.status'); // admin.orders.update.status
+    Route::put('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.update.status');
 
     // User Management (Admin only)
     Route::get('/users', [UserController::class, 'index'])->name('users.index'); // admin.users.index

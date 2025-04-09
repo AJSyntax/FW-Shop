@@ -74,18 +74,41 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        <tr>
-                            <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">#12345</td>
-                            <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">John Doe</td>
-                            <td class="px-6 py-4 whitespace-no-wrap">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">$125.00</td>
-                            <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">2024-01-20</td>
-                        </tr>
-                        <!-- Add more rows as needed -->
+                        @forelse($recentOrders ?? [] as $order)
+                            <tr class="{{ $order->status === 'pending' ? 'bg-yellow-50' : '' }}">
+                                <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">{{ $order->order_number }}</td>
+                                <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">{{ $order->user->name }}</td>
+                                <td class="px-6 py-4 whitespace-no-wrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                        @if($order->status === 'pending') bg-yellow-100 text-yellow-800
+                                        @elseif($order->status === 'processing') bg-blue-100 text-blue-800
+                                        @elseif($order->status === 'shipped') bg-purple-100 text-purple-800
+                                        @elseif($order->status === 'delivered') bg-green-100 text-green-800
+                                        @elseif($order->status === 'cancelled') bg-red-100 text-red-800
+                                        @endif">
+                                        {{ ucfirst($order->status) }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">${{ number_format($order->total_amount, 2) }}</td>
+                                <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">{{ $order->created_at->format('M d, Y') }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="px-6 py-4 text-center text-gray-500">No orders found</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
+                <div class="mt-4 flex justify-between">
+                    @if($pendingOrdersCount > 0)
+                        <a href="{{ route('orders.index', ['status' => 'pending']) }}" class="text-yellow-600 hover:text-yellow-800 font-medium">
+                            <i class="fas fa-exclamation-circle mr-1"></i> View {{ $pendingOrdersCount }} Pending {{ Str::plural('Order', $pendingOrdersCount) }}
+                        </a>
+                    @else
+                        <span></span>
+                    @endif
+                    <a href="{{ route('orders.index') }}" class="text-blue-600 hover:text-blue-800 font-medium">View All Orders <i class="fas fa-arrow-right ml-1"></i></a>
+                </div>
             </div>
 
             <!-- Quick Actions -->
@@ -115,9 +138,12 @@
                             <span>Add New Design</span>
                         </a>
                         {{-- Note: orders.index is outside admin prefix, controller handles auth --}}
-                        <a href="{{ route('orders.index') }}" class="flex items-center p-4 bg-green-50 rounded-lg hover:bg-green-100">
+                        <a href="{{ route('orders.index') }}" class="flex items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 relative">
                             <i class="fas fa-shopping-cart text-green-500 mr-3"></i>
                             <span>View Orders</span>
+                            @if(isset($pendingOrdersCount) && $pendingOrdersCount > 0)
+                                <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">{{ $pendingOrdersCount }}</span>
+                            @endif
                         </a>
                         <a href="{{ route('admin.users.index') }}" class="flex items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100">
                             <i class="fas fa-users text-purple-500 mr-3"></i>

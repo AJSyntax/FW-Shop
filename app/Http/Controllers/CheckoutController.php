@@ -26,8 +26,6 @@ class CheckoutController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth'); // Ensure user is authenticated for all checkout actions
-
         $config = Config::get('paypal');
         $environment = $config['mode'] === 'sandbox'
             ? new SandboxEnvironment($config['sandbox']['client_id'], $config['sandbox']['client_secret'])
@@ -61,12 +59,10 @@ class CheckoutController extends Controller
             $total += $details['price'] * $details['quantity'];
         }
 
-        // TODO: Add logic to fetch user address, payment methods if needed
+        // Get user information
+        $user = Auth::user();
 
-        // Pass PayPal Client ID to the view for the JS SDK
-        $paypalClientId = Config::get('paypal.' . Config::get('paypal.mode') . '.client_id');
-
-        return view('checkout.index', compact('cart', 'total', 'paypalClientId'));
+        return view('checkout.standard', compact('cart', 'total', 'user'));
     }
 
     /**
@@ -170,7 +166,7 @@ class CheckoutController extends Controller
                         'user_id' => $user->id,
                         'order_number' => 'ORD-' . time() . '-' . $user->id, // Consider a more robust unique ID
                         'total_amount' => $total,
-                        'status' => 'processing', // Or 'completed' depending on workflow
+                        'status' => 'pending', // Set to pending for admin confirmation
                         'payment_status' => 'paid',
                         'payment_method' => 'paypal',
                         'transaction_id' => $paypalOrderId, // Store PayPal Order ID
@@ -228,6 +224,71 @@ class CheckoutController extends Controller
         Session::forget(['paypal_order_id', 'paypal_cart', 'paypal_total']);
 
         return redirect()->route('checkout.index')->with('info', 'You cancelled the PayPal payment.');
+    }
+
+    /**
+     * Process the standard checkout form and create the order.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function processStandardCheckout(Request $request)
+    {
+        // Get cart contents
+        $cart = Session::get('cart', []);
+        if (empty($cart)) {
+            return redirect()->route('cart.index')->with('error', 'Your cart is empty. Please add items before checking out.');
+        }
+
+        // Calculate total
+        $total = 0;
+        foreach ($cart as $id => $details) {
+            $total += $details['price'] * $details['quantity'];
+        }
+
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Please login to proceed to checkout.');
+        }
+
+        // Create the order
+        DB::beginTransaction();
+        try {
+            $order = Order::create([
+                'user_id' => $user->id,
+                'order_number' => 'ORD-' . time() . '-' . $user->id,
+                'total_amount' => $total,
+                'status' => 'pending', // Set to pending for admin confirmation
+                'payment_status' => 'pending', // Since we're not using PayPal, mark as pending
+                'payment_method' => 'standard',
+                'shipping_address' => 'Digital delivery', // For digital products
+                'billing_address' => 'Digital delivery', // For digital products
+                'transaction_id' => 'STD-' . Str::random(10), // Generate a random transaction ID
+            ]);
+
+            foreach ($cart as $id => $details) {
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'design_id' => $id,
+                    'quantity' => $details['quantity'],
+                    'price' => $details['price'],
+                ]);
+                // Optional: Decrement stock
+            }
+
+            DB::commit();
+
+            // Clear cart after successful order creation
+            Session::forget('cart');
+
+            return redirect()->route('checkout.success', ['order' => $order->id])
+                             ->with('success', 'Your order has been placed successfully!');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error('Order creation failed: ' . $e->getMessage());
+            return redirect()->route('checkout.index')->with('error', 'There was an issue processing your order. Please try again.');
+        }
     }
 
     /**
