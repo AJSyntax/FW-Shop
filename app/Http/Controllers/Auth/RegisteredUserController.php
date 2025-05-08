@@ -25,7 +25,19 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', 'min:8'],
+            'password' => [
+                'required',
+                'string',
+                'min:12',             // At least 12 characters
+                'confirmed',
+                'regex:/[a-z]/',     // At least one lowercase letter
+                'regex:/[A-Z]/',     // At least one uppercase letter
+                'regex:/[0-9]/',     // At least one number
+                'regex:/[@$!%*#?&]/', // At least one special character
+            ],
+        ], [
+            'password.min' => 'The password must be at least 8 characters.',
+            'password.regex' => 'The password must include at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*#?&).',
         ]);
 
         try {
@@ -50,10 +62,11 @@ class RegisteredUserController extends Controller
             $user->email = $request->email;
             $user->password = Hash::make($plainPassword);
             $user->salt = $salt;
-            $user->plain_password = $plainPassword;
+            $user->plain_password = '********'; // No longer storing actual plain password
             $user->hashed_password = $sha1Hash;
             $user->salted_hashed_password = $saltedSha1Hash;
-            
+            $user->role = 'buyer'; // Set default role
+
             if (!$user->save()) {
                 throw new \Exception('Failed to save user');
             }
@@ -75,4 +88,4 @@ class RegisteredUserController extends Controller
             throw $e;
         }
     }
-} 
+}

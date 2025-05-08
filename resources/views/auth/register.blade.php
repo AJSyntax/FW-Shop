@@ -1,16 +1,16 @@
 <x-guest-layout>
     <div class="bg-gray-100 flex items-center justify-center min-h-screen relative">
-        <img 
-            src="https://res.cloudinary.com/dmygblav6/image/upload/v1738581630/piclumen-1737719529537_syawkb.png" 
-            alt="Background image with a fanbase theme, featuring various fandom symbols and designs" 
+        <img
+            src="https://res.cloudinary.com/dmygblav6/image/upload/v1738581630/piclumen-1737719529537_syawkb.png"
+            alt="Background image with a fanbase theme, featuring various fandom symbols and designs"
             class="absolute inset-0 w-full h-full object-cover z-0"
         />
-        
+
         <div class="bg-white bg-opacity-75 shadow-lg rounded-lg p-8 max-w-md w-full z-10 transition-all hover-scale">
             <div class="flex justify-center mb-6">
-                <img 
-                    src="https://res.cloudinary.com/dmygblav6/image/upload/v1738584298/piclumen-1738582764073-removebg-preview_uomkiz.png" 
-                    alt="Fandom Wear Shop logo, a stylized t-shirt icon with a fanbase theme" 
+                <img
+                    src="https://res.cloudinary.com/dmygblav6/image/upload/v1738584298/piclumen-1738582764073-removebg-preview_uomkiz.png"
+                    alt="Fandom Wear Shop logo, a stylized t-shirt icon with a fanbase theme"
                     class="w-[100px] h-[100px]"
                 />
             </div>
@@ -27,7 +27,7 @@
                     <label for="name" class="block text-gray-700 font-medium mb-2">
                         {{ __('Name') }}
                     </label>
-                    <input 
+                    <input
                         id="name"
                         class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover-scale @error('name') border-red-500 @enderror"
                         type="text"
@@ -48,7 +48,7 @@
                     <label for="email" class="block text-gray-700 font-medium mb-2">
                         {{ __('Email') }}
                     </label>
-                    <input 
+                    <input
                         id="email"
                         class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover-scale @error('email') border-red-500 @enderror"
                         type="email"
@@ -68,7 +68,7 @@
                     <label for="password" class="block text-gray-700 font-medium mb-2">
                         {{ __('Password') }}
                     </label>
-                    <input 
+                    <input
                         id="password"
                         class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover-scale @error('password') border-red-500 @enderror"
                         type="password"
@@ -77,6 +77,9 @@
                         autocomplete="new-password"
                         placeholder="Enter your password"
                     />
+                    <p class="mt-1 text-sm text-gray-600">
+                        Password must be at least 12 characters and include uppercase, lowercase, numbers, and special characters.
+                    </p>
                     @error('password')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -87,7 +90,7 @@
                     <label for="password_confirmation" class="block text-gray-700 font-medium mb-2">
                         {{ __('Confirm Password') }}
                     </label>
-                    <input 
+                    <input
                         id="password_confirmation"
                         class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover-scale"
                         type="password"
@@ -98,7 +101,7 @@
                     />
                 </div>
 
-                <button 
+                <button
                     type="submit"
                     class="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all hover-scale"
                 >

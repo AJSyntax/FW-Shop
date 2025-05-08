@@ -73,15 +73,17 @@
                                 <td class="py-2 px-4 border-b">{{ $order->created_at->format('M d, Y') }}</td>
                                 <td class="py-2 px-4 border-b">
                                     <div class="flex space-x-2">
-                                        <a href="{{ route('orders.show', $order) }}" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
-                                            <i class="fas fa-eye"></i>
+                                        <a href="{{ route('orders.show', $order) }}" class="inline-flex items-center px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-md">
+                                            <i class="fas fa-eye mr-1"></i>
+                                            View
                                         </a>
-                                        <button class="{{ $order->status === 'pending' ? 'bg-yellow-500 hover:bg-yellow-600' : 'bg-green-500 hover:bg-green-600' }} text-white px-3 py-1 rounded flex items-center"
+                                        <button class="inline-flex items-center px-3 py-1 {{ $order->status === 'pending' ? 'bg-yellow-500 hover:bg-yellow-600' : 'bg-green-500 hover:bg-green-600' }} text-white rounded-md"
                                                 onclick="updateStatus({{ $order->id }})" title="{{ $order->status === 'pending' ? 'Confirm Order' : 'Update Status' }}">
                                             @if($order->status === 'pending')
                                                 <i class="fas fa-check mr-1"></i> Confirm
                                             @else
-                                                <i class="fas fa-shipping-fast"></i>
+                                                <i class="fas fa-shipping-fast mr-1"></i>
+                                                Update
                                             @endif
                                         </button>
                                     </div>
@@ -126,9 +128,15 @@
                 </div>
                 <div class="flex justify-end space-x-2">
                     <button type="button" onclick="closeStatusModal()"
-                            class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancel</button>
+                            class="inline-flex items-center px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300">
+                        <i class="fas fa-times mr-1"></i>
+                        Cancel
+                    </button>
                     <button type="submit" id="statusSubmitButton"
-                            class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Update Status</button>
+                            class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                        <i class="fas fa-save mr-1"></i>
+                        Update Status
+                    </button>
                 </div>
             </form>
         </div>

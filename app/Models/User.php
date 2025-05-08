@@ -12,6 +12,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Models\Order;
 use App\Models\SecurityQuestion;
+use App\Notifications\CustomVerifyEmail;
 
 class User extends Authenticatable implements MustVerifyEmail, ShouldQueue
 {
@@ -141,5 +142,15 @@ class User extends Authenticatable implements MustVerifyEmail, ShouldQueue
     {
         return !is_null($this->security_question_1_id) && !is_null($this->security_answer_1) &&
                !is_null($this->security_question_2_id) && !is_null($this->security_answer_2);
+    }
+
+    /**
+     * Send the email verification notification.
+     *
+     * @return void
+     */
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new CustomVerifyEmail);
     }
 }

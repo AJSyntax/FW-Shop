@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-2xl font-semibold">Categories</h2>
-                    <button onclick="openAddModal()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                    <button onclick="openAddModal()" class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
                         <i class="fas fa-plus mr-2"></i>Add Category
                     </button>
                 </div>
@@ -32,13 +32,15 @@
                             <td class="py-2 px-4 border-b">12</td>
                             <td class="py-2 px-4 border-b">
                                 <div class="flex space-x-2">
-                                    <button class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600" 
+                                    <button class="inline-flex items-center px-3 py-1 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
                                             onclick="openEditModal(1)">
-                                        <i class="fas fa-edit"></i>
+                                        <i class="fas fa-edit mr-1"></i>
+                                        Edit
                                     </button>
-                                    <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                                    <button class="inline-flex items-center px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700"
                                             onclick="confirmDelete(1)">
-                                        <i class="fas fa-trash"></i>
+                                        <i class="fas fa-trash mr-1"></i>
+                                        Delete
                                     </button>
                                 </div>
                             </td>
@@ -63,10 +65,16 @@
                     <textarea name="description" class="w-full px-3 py-2 border rounded" rows="3"></textarea>
                 </div>
                 <div class="flex justify-end space-x-2">
-                    <button type="button" onclick="closeModal()" 
-                            class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancel</button>
-                    <button type="submit" 
-                            class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Save</button>
+                    <button type="button" onclick="closeModal()"
+                            class="inline-flex items-center px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300">
+                        <i class="fas fa-times mr-1"></i>
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                        <i class="fas fa-save mr-1"></i>
+                        Save
+                    </button>
                 </div>
             </form>
         </div>
@@ -95,4 +103,4 @@
             }
         }
     </script>
-</x-app-layout> 
+</x-app-layout>

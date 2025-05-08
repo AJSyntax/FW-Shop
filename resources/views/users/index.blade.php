@@ -49,14 +49,20 @@
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <a href="{{ route('admin.users.show', $user) }}" class="text-blue-600 hover:text-blue-900 mr-3">View</a>
-                                        <form action="{{ route('admin.users.toggle-block', $user) }}" method="POST" class="inline">
-                                            @csrf
-                                            @method('PUT')
-                                            <button type="submit" class="text-{{ $user->is_blocked ? 'green' : 'red' }}-600 hover:text-{{ $user->is_blocked ? 'green' : 'red' }}-900">
-                                                {{ $user->is_blocked ? 'Unblock' : 'Block' }}
-                                            </button>
-                                        </form>
+                                        <div class="flex space-x-2">
+                                            <a href="{{ route('admin.users.show', $user) }}" class="inline-flex items-center px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-md">
+                                                <i class="fas fa-eye mr-1"></i>
+                                                View
+                                            </a>
+                                            <form action="{{ route('admin.users.toggle-block', $user) }}" method="POST" class="inline">
+                                                @csrf
+                                                @method('PUT')
+                                                <button type="submit" class="inline-flex items-center px-3 py-1 bg-{{ $user->is_blocked ? 'green' : 'red' }}-500 hover:bg-{{ $user->is_blocked ? 'green' : 'red' }}-600 text-white rounded-md">
+                                                    <i class="fas fa-{{ $user->is_blocked ? 'unlock' : 'ban' }} mr-1"></i>
+                                                    {{ $user->is_blocked ? 'Unblock' : 'Block' }}
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty

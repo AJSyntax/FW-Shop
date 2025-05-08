@@ -45,7 +45,7 @@
                             <p class="text-gray-500">Active Users</p>
                             <h3 class="text-2xl font-bold">{{ $activeUsers ?? 0 }}</h3>
                             <p class="{{ ($usersPercentChange ?? 0) >= 0 ? 'text-green-500' : 'text-red-500' }} text-sm">
-                                {{ ($usersPercentChange ?? 0) >= 0 ? '+' : '' }}{{ $usersPercentChange ?? 0 }}% from last month
+                                {{ ($usersPercentChange ?? 0) >= 0 ? '+' : '' }}{{ $usersPercentChange ?? 0 }}% new this month
                             </p>
                         </div>
                     </div>
